@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Tray, Menu } = require('electron')
 const isDev = require('electron-is-dev')
+const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -37,6 +38,21 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
+
+  const iconPath = path.join(__dirname, '/assets/icons/16.png')
+  var appIcon = new Tray(iconPath)
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Stop timer',
+      click: () => {
+        app.quit()
+      }
+    }
+  ])
+
+  appIcon.setToolTip('Notifier')
+  appIcon.setContextMenu(contextMenu)
 })
 
 if (!isDev) {
