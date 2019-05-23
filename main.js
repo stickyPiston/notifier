@@ -1,10 +1,11 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let win, appIcon
+var template, intervals = []
 
 function createWindow() {
   // Create the browser window.
@@ -14,8 +15,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    frame: false,
-    transparent: true
+    show: false,
+    frame: false
   })
 
   // and load the index.html of the app.
@@ -33,6 +34,11 @@ function createWindow() {
   })
 }
 
+const updateTray = () => {
+  const contextMenu = Menu.buildFromTemplate(template)
+  appIcon.setContextMenu(contextMenu)
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -40,19 +46,45 @@ app.on('ready', () => {
   createWindow()
 
   const iconPath = path.join(__dirname, '/assets/icons/16.png')
-  var appIcon = new Tray(iconPath)
-
-  const contextMenu = Menu.buildFromTemplate([
+  appIcon = new Tray(iconPath)
+  template = [
+    { role: 'quit' },
     {
-      label: 'Stop timer',
+      label: 'Add a timer',
       click: () => {
-        app.quit()
+        win.show()
       }
-    }
-  ])
+    },
+    {
+      role: 'help',
+      submenu: [
+        {
+          label: 'Learn More',
+          click() { require('electron').shell.openExternalSync('https://github.com/stickyPiston/notifier') }
+        }
+      ]
+    },
+    { type: 'separator' }
+  ]
 
   appIcon.setToolTip('Notifier')
-  appIcon.setContextMenu(contextMenu)
+  updateTray()  
+
+  ipcMain.on('formSubmitted', (e, arg) => {
+    intervals.push(arg)
+    var intervalID = setInterval(() => {
+      e.sender.send('notify', arg)
+    }, arg.time)
+    var index = template.push({
+      label: arg.title + ' (' + arg.time / 60000 + ' min)'
+    })-1
+    template[index].click = () => {
+      template.splice(index, 1)
+      updateTray()
+      clearTimeout(intervalID)
+    }
+    updateTray()
+  })
 })
 
 if (!isDev) {
