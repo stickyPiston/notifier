@@ -3,8 +3,13 @@
 
 * * *
 
+## 💻 How does the app work?
+It is very simple. In your tray, on Mac at the top right and on windows at the bottom right, an icon like the electron icon shows up. If you click it, a menu appears. Hit "_Add a timer_" to create a new timer. Fill all the information required and click submit. You have successfully created a timer.
+
+* * *
+
 ## ☝️ Any improvements or bugs found?
-Be sure to create a new issue for this repository. Any suggestions are welcome!
+Be sure to create a new issue for this repository when you find a bug, suggestion or anything equivalent to that. Any suggestions are welcome!
 
 * * *
 
