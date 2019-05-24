@@ -1,4 +1,5 @@
-# notifier
+ <p align="left"><img src="logo/horizontal.png" alt="notifier" height="90px"></p>
+
 🔔 An application that reminds you of things.
 
 * * *
