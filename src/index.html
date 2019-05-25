@@ -4,18 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <style>
-    html, body {
-      background: transparent;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/main.css">
   <title>Add a timer</title>
 </head>
 <body>
+  <h3>Add a timer</h3>
   <form>
-    Time in min: <input type="number" step="0.1"><br>
-    Title: <input id="title" type="text"><br>
-    Body: <input id="body" type="text"><br>
+    * = required
+    <label for="number">Time* (in min.): <br><input required type="number" step="0.1"></label>
+    <label for="title">Title*: <br><input required id="title" type="text"></label>
+    <label for="body">Body: <br><input id="body" type="text"></label>
     <input type="submit" value="Add the timer!">
   </form>
 

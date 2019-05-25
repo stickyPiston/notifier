@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0 20px 0 20px;
+  font-family: sans-serif;
+
+  h3 {
+    text-align: center;
+  }
+
+  form {
+    display: grid;
+    grid-template-rows: auto auto auto;
+
+    label {
+      text-align: left;
+
+      input {
+        outline: none;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+    }
+
+    label.valid {
+      color: green;
+
+      input {
+        border: 1px solid green;
+        box-shadow: 0 0 1px 0 green;
+      }
+    }
+
+    label.invalid {
+      color: red;
+      
+      input {
+        border: 1px solid red;
+        box-shadow: 0 0 1px 0 red;
+      }
+    }
+  }
+}
