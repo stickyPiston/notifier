@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
@@ -45,8 +45,10 @@ const updateTray = () => {
 app.on('ready', () => {
   createWindow()
 
-  const iconPath = path.join(__dirname, '/assets/icons/16.png')
-  appIcon = new Tray(iconPath)
+  const iconPath = path.join(__dirname, '/assets/icons/256x256.png')
+  var image = nativeImage.createFromPath(iconPath)
+  image = image.resize({width: 24, height: 24, quality: 'best'})
+  appIcon = new Tray(image)
   template = [
     { role: 'quit' },
     {
