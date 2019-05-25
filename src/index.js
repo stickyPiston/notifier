@@ -15,3 +15,17 @@ document.querySelector('form').addEventListener('submit', e => {
 ipcRenderer.on('notify', (_e, arg) => {
   new Notification(arg.title, {body: arg.body})
 })
+
+Array.from(document.querySelectorAll('form input:not([type=submit])')).forEach(element => {
+  element.addEventListener('blur', (e) => {
+    target =  e.target
+    parent = target.parentElement
+    if (target.required && target.value != '') {
+      parent.classList.remove('invalid')
+      parent.classList.add('valid')
+    } else if (target.required && target.value == '') {
+      parent.classList.remove('valid')
+      parent.classList.add('invalid')
+    }
+  })
+})

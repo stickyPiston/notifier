@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: 0 20px 0 20px;
+  font-family: sans-serif;
+}
+
+body h3 {
+  text-align: center;
+}
+
+body form {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto auto auto;
+      grid-template-rows: auto auto auto;
+}
+
+body form label {
+  text-align: left;
+}
+
+body form label input {
+  outline: none;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+body form label.valid {
+  color: green;
+}
+
+body form label.valid input {
+  border: 1px solid green;
+  -webkit-box-shadow: 0 0 1px 0 green;
+          box-shadow: 0 0 1px 0 green;
+}
+
+body form label.invalid {
+  color: red;
+}
+
+body form label.invalid input {
+  border: 1px solid red;
+  -webkit-box-shadow: 0 0 1px 0 red;
+          box-shadow: 0 0 1px 0 red;
+}
+/*# sourceMappingURL=main.css.map */
