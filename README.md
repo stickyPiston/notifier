@@ -1,4 +1,4 @@
- <p align="left"><img src="logo/horizontal.png" alt="notifier" height="90px"></p>
+ <p align="left"><img src="assets/icons/horizontal.png" alt="notifier" height="90px"></p>
 
 🔔 An application that reminds you of things.
 
@@ -23,3 +23,7 @@ git clone https://github.com/stickyPiston/notifier.git && cd notifier
 npm install
 npm start
 ```
+
+* * *
+## 📃 License
+See the LICENSE file.
