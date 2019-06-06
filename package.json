@@ -2,6 +2,10 @@
   "name": "notifier",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stickyPiston/notifier.git"
+  },
   "main": "main.js",
   "scripts": {
     "start": "electron ."
