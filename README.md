@@ -9,6 +9,8 @@ It is very simple. In your tray, on Mac at the top right and on windows at the b
 
 If you want to delete a timer. Click the icon again and hit the name of the timer that you want to delete. Hit "Quit notifier" to stop all timers and the application itself.
 
+🚨 The notifications do not work on Windows machines! This will be fixed in a future version.
+
 * * *
 
 ## ☝️ Any improvements or bugs found?
