@@ -8,14 +8,31 @@
   <title>Add a timer</title>
 </head>
 <body>
-  <h3>Add a timer</h3>
+  <h3>Create a new timer.</h3>
+  <div><strong>Warning!</strong> Only the `every` input and the `notification` input work just yet.</div>
   <form>
-    * = required
-    <label for="number">Time* (in min.): <br><input required type="number" step="0.1"></label>
-    <label for="title">Title*: <br><input required id="title" type="text"></label>
-    <label for="body">Body: <br><input id="body" type="text"></label>
-    <input type="submit" value="Add the timer!">
+    <div class="container">
+      <div class="col1">
+        <h5>Notify me...</h5>
+        <div class="enabled"><input type="checkbox"><div>Every <input type="number" placeholder="e.g. 20" id="every" step="0.1"> Minutes</div></div>
+        <div class="disabled"><input type="checkbox"><div>In <input type="number" placeholder="e.g. 20"> Minutes</div></div>
+        <div class="disabled"><input type="checkbox"><div>Every day at <input type="time" placeholder="3:15 PM"></div></div>
+      </div>
+      <div class="col2">
+        <h5>And then...</h5>
+        <div class="enabled"><input type="checkbox"><div>Create a notification <input type="text" id="title"></div></div>
+        <div class="disabled"><input type="checkbox"><div>Open a program <button>Choose a program</button></div></div>
+        <div class="disabled"><input type="checkbox"><div>Browse to <input type="url" placeholder="e.g. https://jobbel.nl"></div></div>
+      </div>
+    </div>
+    
+    <input type="submit" value="Set the new timer!">
   </form>
+  <!-- * = required
+  <label for="number">Time* (in min.): <br><input required type="number" step="0.1"></label>
+  <label for="title">Title*: <br><input required id="title" type="text"></label>
+  <label for="body">Body: <br><input id="body" type="text"></label>
+  <input type="submit" value="Add the timer!"> -->
 
   <script src="index.js"></script>
 </body>

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, Notification } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
@@ -10,13 +10,12 @@ var template, intervals = []
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 400,
-    height: 100,
+    width: 680,
+    height: 370,
     webPreferences: {
       nodeIntegration: true
     },
-    show: false,
-    frame: false
+    show: false
   })
 
   // and load the index.html of the app.
@@ -72,10 +71,12 @@ app.on('ready', () => {
   appIcon.setToolTip('Notifier')
   updateTray()  
 
-  ipcMain.on('formSubmitted', (e, arg) => {
+  ipcMain.on('formSubmitted', (_e, arg) => {
     intervals.push(arg)
     var intervalID = setInterval(() => {
-      e.sender.send('notify', arg)
+      new Notification({
+        title: arg.title
+      }).show()
     }, arg.time)
     var index = template.push({
       label: arg.title + ' (' + arg.time / 60000 + ' min)'
@@ -87,6 +88,8 @@ app.on('ready', () => {
     }
     updateTray()
   })
+
+  
 })
 
 if (!isDev) {

@@ -8,40 +8,48 @@ body h3 {
   text-align: center;
 }
 
-body form {
+body form div.container {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: auto auto auto;
-      grid-template-rows: auto auto auto;
+  -ms-grid-columns: 50% 50%;
+      grid-template-columns: 50% 50%;
 }
 
-body form label {
-  text-align: left;
+body form div.container div.col1, body form div.container div.col2 {
+  border-right: 1px solid black;
+  height: 100%;
 }
 
-body form label input {
-  outline: none;
-  margin-bottom: 10px;
-  width: 100%;
+body form div.container div.col1 div, body form div.container div.col2 div {
+  margin: 10px 0 10px 0;
 }
 
-body form label.valid {
-  color: green;
+body form div.container div.col1 div input[type="checkbox"], body form div.container div.col2 div input[type="checkbox"] {
+  -webkit-transform: translateY(-2px);
+          transform: translateY(-2px);
+  margin-right: 5px;
 }
 
-body form label.valid input {
-  border: 1px solid green;
-  -webkit-box-shadow: 0 0 1px 0 green;
-          box-shadow: 0 0 1px 0 green;
+body form div.container div.col1 div div, body form div.container div.col2 div div {
+  display: inline-block;
 }
 
-body form label.invalid {
-  color: red;
+body form div.container div.col1 .disabled, body form div.container div.col2 .disabled {
+  color: gray;
+  text-decoration: line-through;
 }
 
-body form label.invalid input {
-  border: 1px solid red;
-  -webkit-box-shadow: 0 0 1px 0 red;
-          box-shadow: 0 0 1px 0 red;
+body form div.container div.col2 {
+  padding-left: 20px;
+  border: none;
+}
+
+body form input[type="submit"] {
+  width: auto;
+  padding: 10px;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
 }
 /*# sourceMappingURL=main.css.map */
