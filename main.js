@@ -73,14 +73,24 @@ app.on('ready', () => {
 
   ipcMain.on('formSubmitted', (_e, arg) => {
     intervals.push(arg)
-    var intervalID = setInterval(() => {
-      new Notification({
-        title: arg.title
-      }).show()
-    }, arg.time)
     var index = template.push({
       label: arg.title + ' (' + arg.time / 60000 + ' min)'
     })-1
+    if (arg.action === 'every') {
+      var intervalID = setInterval(() => {
+        new Notification({
+          title: arg.title
+        }).show()
+      }, arg.time)
+    } else if (arg.action === 'once') {
+      var intervalID = setTimeout(() => {
+        new Notification({
+          title: arg.title
+        }).show()
+        template.splice(index, 1)
+        updateTray()
+      }, arg.time)
+    }
     template[index].click = () => {
       template.splice(index, 1)
       updateTray()

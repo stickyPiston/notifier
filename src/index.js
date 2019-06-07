@@ -2,10 +2,12 @@ const { ipcRenderer, remote } = require('electron')
 
 document.querySelector('form').addEventListener('submit', e => {
   e.preventDefault()
-  var target = e.target
-  ipcRenderer.send('formSubmitted', { time: document.querySelector('input#every').value * 60 * 1000, title: document.querySelector('input#title').value })
+  var target = e.target, action;
+  Array.from(document.querySelectorAll('.col1 > div > input[type=checkbox]')).forEach(element => {if (element.checked) action = element});
+  console.log(action.value)
+  ipcRenderer.send('formSubmitted', { time: document.querySelector('input#every').value * 60 * 1000, title: document.querySelector('input#title').value, action: action.value })
   var window = remote.getCurrentWindow()
-  window.hide()
+  //window.hide()
   Array.from(e.target.querySelectorAll('input:not([type="submit"])')).forEach(element => {
     element.value = ''
   })
