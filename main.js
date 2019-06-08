@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, Notification } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, Notification, shell } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
@@ -44,12 +44,17 @@ const updateTray = () => {
 app.on('ready', () => {
   createWindow()
 
+  // Get the image and resize it to be large enough for a tray icon
   const iconPath = path.join(__dirname, '/assets/icons/256x256.png')
   var image = nativeImage.createFromPath(iconPath)
   image = image.resize({width: 24, height: 24, quality: 'best'})
+
+  // Create tray
   appIcon = new Tray(image)
+
+  // Create template array that can be updated later
   template = [
-    { role: 'quit' },
+    { role: 'quit', accelerator: 'CmdOrCtrl+Q' },
     {
       label: 'Add a timer',
       click: () => {
@@ -60,48 +65,93 @@ app.on('ready', () => {
       role: 'help',
       submenu: [
         {
-          label: 'Learn More',
-          click() { require('electron').shell.openExternalSync('https://github.com/stickyPiston/notifier') }
+          label: 'Github Page',
+          click() { shell.openExternalSync('https://github.com/stickyPiston/notifier') }
         }
       ]
     },
     { type: 'separator' }
   ]
 
+  // Set tooltip for tray
   appIcon.setToolTip('Notifier')
+
+  // Update tray to contain initial template
   updateTray()  
 
+  // When the addTimer form is completed
   ipcMain.on('formSubmitted', (_e, arg) => {
+    // Add timer to intervals array
     intervals.push(arg)
+
+    // Add timer to template array for tray
     var index = template.push({
-      label: arg.title + ' (' + arg.time / 60000 + ' min)'
+      label: arg.actionValue.replace('https://', '') + ' (' + arg.time / 60000 + ' min)'
     })-1
-    if (arg.action === 'every') {
-      var intervalID = setInterval(() => {
-        new Notification({
-          title: arg.title
-        }).show()
-      }, arg.time)
-    } else if (arg.action === 'once') {
-      var intervalID = setTimeout(() => {
-        new Notification({
-          title: arg.title
-        }).show()
-        template.splice(index, 1)
-        updateTray()
-      }, arg.time)
-    }
+
+    // When 'every' input is checked
+    if (arg.when === 'every') {
+
+      // Create notification
+      if (arg.action === 'notification') {
+
+        var intervalID = setInterval(() => {
+          new Notification({
+            title: arg.actionValue
+          }).show()
+        }, arg.time)
+
+      // Open url
+      } else if (arg.action === 'url') {
+        
+        var intervalID = setInterval(() => {
+          shell.openExternalSync(arg.actionValue)
+        }, arg.time)
+
+      }
+
+    // When 'once' input is checked
+    } else if (arg.when === 'once') {
+
+      // Create notification
+      if (arg.action === 'notification') {
+
+        var intervalID = setTimeout(() => {
+          new Notification({
+            title: arg.title
+          }).show()
+          template.splice(index, 1)
+          updateTray()
+        }, arg.time)
+
+        // Open url
+      } else if (arg.action === 'url') {
+
+        var intervalID = setTimeout(() => {
+          shell.openExternalSync(arg.actionValue)
+          template.splice(index, 1)
+          updateTray()
+        }, arg.time)
+
+      }
+
+    } // endif
+
+    // Set click event on the tray element
     template[index].click = () => {
       template.splice(index, 1)
       updateTray()
       clearTimeout(intervalID)
     }
+
+    // Update the tray
     updateTray()
   })
 
   
 })
 
+// When the app isn't in development mode, set the app to open at boot
 if (!isDev) {
   app.setLoginItemSettings({
     openAtLogin: true,
