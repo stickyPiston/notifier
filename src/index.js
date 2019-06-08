@@ -8,7 +8,10 @@ document.querySelector('form').addEventListener('submit', e => {
   // 'action' handler
   Array.from(document.querySelectorAll('.col2 > div > input[type=checkbox]')).forEach(element => { element.value = element.value; if (element.checked) { action = element.value; actionValue = document.querySelector('#' + element.value).value; console.log(element) } });
   
-  ipcRenderer.send('formSubmitted', { time: document.querySelector('input#' + when).value * 60 * 1000, when: when, action: action, actionValue: actionValue })
+  console.log(document.querySelector('input#' + when).value * 60 * 1000);
+  
+
+  ipcRenderer.send('formSubmitted', { time: document.querySelector('input#' + when).value, when: when, action: action, actionValue: actionValue })
   var window = remote.getCurrentWindow()
   //window.hide()
   Array.from(e.target.querySelectorAll('input:not([type="submit"]):not([type="checkbox"])')).forEach(element => {

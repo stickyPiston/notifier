@@ -5,7 +5,7 @@ const path = require('path')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win, appIcon
-var template, intervals = []
+var template, intervals = [], i=0
 
 function createWindow() {
   // Create the browser window.
@@ -99,14 +99,14 @@ app.on('ready', () => {
           new Notification({
             title: arg.actionValue
           }).show()
-        }, arg.time)
+        }, arg.time * 60 * 1000)
 
       // Open url
       } else if (arg.action === 'url') {
         
         var intervalID = setInterval(() => {
           shell.openExternalSync(arg.actionValue)
-        }, arg.time)
+        }, arg.time * 60 * 1000)
 
       }
 
@@ -122,7 +122,7 @@ app.on('ready', () => {
           }).show()
           template.splice(index, 1)
           updateTray()
-        }, arg.time)
+        }, arg.time * 60 * 1000)
 
         // Open url
       } else if (arg.action === 'url') {
@@ -131,11 +131,41 @@ app.on('ready', () => {
           shell.openExternalSync(arg.actionValue)
           template.splice(index, 1)
           updateTray()
-        }, arg.time)
+        }, arg.time * 60 * 1000)
 
       }
 
-    } // endif
+    } else if (arg.when === 'daily' ) {
+     
+      var intervalID = setInterval(() => {
+        
+        var now = new Date()
+        var date = new Date((now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getFullYear() + " " + arg.time)
+
+        if (now.getHours() === date.getHours() && now.getMinutes() === date.getMinutes() && i === 0) {
+          
+          if (arg.action === 'notification') {
+
+            new Notification({
+              title: arg.actionValue
+            }).show()
+
+            // Open url
+          } else if (arg.action === 'url') {
+
+            shell.openExternalSync(arg.actionValue)
+
+          }
+
+          i = 1;
+
+          console.log(i)
+
+        }
+
+      }, 1000);
+
+    }// endif
 
     // Set click event on the tray element
     template[index].click = () => {
