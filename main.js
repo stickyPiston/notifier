@@ -5,7 +5,7 @@ const path = require('path')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win, appIcon
-var template, intervals = [], i=0
+var template, dailyIntervals = []
 
 function createWindow() {
   // Create the browser window.
@@ -31,6 +31,34 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null
   })
+}
+
+const execAction = (arg, index) => {
+  // Create notification
+  if (arg.action === 'notification') {
+
+      new Notification({
+        title: arg.actionValue
+      }).show()
+      if (arg.when === 'once') {
+        template.splice(index, 1)
+        updateTray()
+      }
+
+    // Open url
+  } else if (arg.action === 'url') {
+
+      shell.openExternalSync(arg.actionValue)
+      if (arg.when === 'once') {
+        template.splice(index, 1)
+        updateTray()
+      }
+
+  } else if (arg.action === 'program') {
+    var cp = require("child_process")
+    cp.exec("document.docx")
+    console.log('program executed!')
+  }
 }
 
 const updateTray = () => {
@@ -81,91 +109,37 @@ app.on('ready', () => {
 
   // When the addTimer form is completed
   ipcMain.on('formSubmitted', (_e, arg) => {
-    // Add timer to intervals array
-    intervals.push(arg)
-
+    console.log('form submitted!');
+    
     // Add timer to template array for tray
     var index = template.push({
-      label: arg.actionValue.replace('https://', '') + ' (' + arg.time / 60000 + ' min)'
+      label: arg.actionValue.replace('https://', '') + ' (' + arg.time + ' min)'
     })-1
 
-    // When 'every' input is checked
-    if (arg.when === 'every') {
+    if (arg.when === 'daily' ) {
 
-      // Create notification
-      if (arg.action === 'notification') {
-
-        var intervalID = setInterval(() => {
-          new Notification({
-            title: arg.actionValue
-          }).show()
-        }, arg.time * 60 * 1000)
-
-      // Open url
-      } else if (arg.action === 'url') {
-        
-        var intervalID = setInterval(() => {
-          shell.openExternalSync(arg.actionValue)
-        }, arg.time * 60 * 1000)
-
-      }
-
-    // When 'once' input is checked
-    } else if (arg.when === 'once') {
-
-      // Create notification
-      if (arg.action === 'notification') {
-
-        var intervalID = setTimeout(() => {
-          new Notification({
-            title: arg.title
-          }).show()
-          template.splice(index, 1)
-          updateTray()
-        }, arg.time * 60 * 1000)
-
-        // Open url
-      } else if (arg.action === 'url') {
-
-        var intervalID = setTimeout(() => {
-          shell.openExternalSync(arg.actionValue)
-          template.splice(index, 1)
-          updateTray()
-        }, arg.time * 60 * 1000)
-
-      }
-
-    } else if (arg.when === 'daily' ) {
+      var varName = arg.actionValue + Math.round(Math.random() * 10)
+      dailyIntervals[varName] = 0
      
       var intervalID = setInterval(() => {
         
         var now = new Date()
         var date = new Date((now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getFullYear() + " " + arg.time)
 
-        if (now.getHours() === date.getHours() && now.getMinutes() === date.getMinutes() && i === 0) {
+        if (now.getHours() === date.getHours() && now.getMinutes() === date.getMinutes() && dailyIntervals[varName] === 0) {
           
-          if (arg.action === 'notification') {
+          execAction(arg)
 
-            new Notification({
-              title: arg.actionValue
-            }).show()
-
-            // Open url
-          } else if (arg.action === 'url') {
-
-            shell.openExternalSync(arg.actionValue)
-
-          }
-
-          i = 1;
-
-          console.log(i)
+          dailyIntervals[varName] = 1
 
         }
 
       }, 1000);
 
-    }// endif
+    } else {
+      if (arg.when === 'every') var intervalID = setInterval(() => { execAction(arg) }, arg.time * 60 * 1000)
+      else if (arg.when === 'once') var intervalID = setTimeout(() => { execAction(arg, index) }, arg.time * 60 * 1000)
+    }
 
     // Set click event on the tray element
     template[index].click = () => {
