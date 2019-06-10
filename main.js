@@ -1,22 +1,21 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, Notification, shell } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win, appIcon
-var template, intervals = []
+var template, dailyIntervals = []
 
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 400,
-    height: 100,
+    width: 680,
+    height: 370,
     webPreferences: {
       nodeIntegration: true
     },
-    show: false,
-    frame: false
+    show: false
   })
 
   // and load the index.html of the app.
@@ -34,6 +33,34 @@ function createWindow() {
   })
 }
 
+const execAction = (arg, index) => {
+  // Create notification
+  if (arg.action === 'notification') {
+
+      new Notification({
+        title: arg.actionValue
+      }).show()
+      if (arg.when === 'once') {
+        template.splice(index, 1)
+        updateTray()
+      }
+
+    // Open url
+  } else if (arg.action === 'url') {
+
+      shell.openExternalSync(arg.actionValue)
+      if (arg.when === 'once') {
+        template.splice(index, 1)
+        updateTray()
+      }
+
+  } else if (arg.action === 'program') {
+    var cp = require("child_process")
+    cp.exec("document.docx")
+    console.log('program executed!')
+  }
+}
+
 const updateTray = () => {
   const contextMenu = Menu.buildFromTemplate(template)
   appIcon.setContextMenu(contextMenu)
@@ -45,12 +72,17 @@ const updateTray = () => {
 app.on('ready', () => {
   createWindow()
 
+  // Get the image and resize it to be large enough for a tray icon
   const iconPath = path.join(__dirname, '/assets/icons/256x256.png')
   var image = nativeImage.createFromPath(iconPath)
   image = image.resize({width: 24, height: 24, quality: 'best'})
+
+  // Create tray
   appIcon = new Tray(image)
+
+  // Create template array that can be updated later
   template = [
-    { role: 'quit' },
+    { role: 'quit', accelerator: 'CmdOrCtrl+Q' },
     {
       label: 'Add a timer',
       click: () => {
@@ -61,34 +93,69 @@ app.on('ready', () => {
       role: 'help',
       submenu: [
         {
-          label: 'Learn More',
-          click() { require('electron').shell.openExternalSync('https://github.com/stickyPiston/notifier') }
+          label: 'Github Page',
+          click() { shell.openExternalSync('https://github.com/stickyPiston/notifier') }
         }
       ]
     },
     { type: 'separator' }
   ]
 
+  // Set tooltip for tray
   appIcon.setToolTip('Notifier')
+
+  // Update tray to contain initial template
   updateTray()  
 
-  ipcMain.on('formSubmitted', (e, arg) => {
-    intervals.push(arg)
-    var intervalID = setInterval(() => {
-      e.sender.send('notify', arg)
-    }, arg.time)
+  // When the addTimer form is completed
+  ipcMain.on('formSubmitted', (_e, arg) => {
+    console.log('form submitted!');
+    
+    // Add timer to template array for tray
     var index = template.push({
-      label: arg.title + ' (' + arg.time / 60000 + ' min)'
+      label: arg.actionValue.replace('https://', '') + ' (' + arg.time + ' min)'
     })-1
+
+    if (arg.when === 'daily' ) {
+
+      var varName = arg.actionValue + Math.round(Math.random() * 10)
+      dailyIntervals[varName] = 0
+     
+      var intervalID = setInterval(() => {
+        
+        var now = new Date()
+        var date = new Date((now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getFullYear() + " " + arg.time)
+
+        if (now.getHours() === date.getHours() && now.getMinutes() === date.getMinutes() && dailyIntervals[varName] === 0) {
+          
+          execAction(arg)
+
+          dailyIntervals[varName] = 1
+
+        }
+
+      }, 1000);
+
+    } else {
+      if (arg.when === 'every') var intervalID = setInterval(() => { execAction(arg) }, arg.time * 60 * 1000)
+      else if (arg.when === 'once') var intervalID = setTimeout(() => { execAction(arg, index) }, arg.time * 60 * 1000)
+    }
+
+    // Set click event on the tray element
     template[index].click = () => {
       template.splice(index, 1)
       updateTray()
       clearTimeout(intervalID)
     }
+
+    // Update the tray
     updateTray()
   })
+
+  
 })
 
+// When the app isn't in development mode, set the app to open at boot
 if (!isDev) {
   app.setLoginItemSettings({
     openAtLogin: true,
