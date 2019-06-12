@@ -9,7 +9,7 @@ It is very simple. In your tray, on Mac at the top right and on windows at the b
 
 If you want to delete a timer. Click the icon again and hit the name of the timer that you want to delete. Hit "Quit notifier" to stop all timers and the application itself.
 
-🚨 The notifications do not work on Windows machines! This will be fixed in a future version.
+🚨 The notifications do not work on Windows machines! See the note at [Build from source](#%EF%B8%8F-build-form-source)
 
 * * *
 
@@ -26,6 +26,8 @@ npm install
 npm start
 ```
 
+**Note:** On windows machines the notifications won't work when you build the project from source. To fix this add `node_modules/electron/dist/electron.exe` to your start menu. For more information about this, take a look at the [documentation](https://electronjs.org/docs/tutorial/notifications#windows).
+
 * * *
 ## 📃 License
-See the LICENSE file.
+This repository is licensed under the Unlicense license. See the LICENSE file.
