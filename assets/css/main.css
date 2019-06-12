@@ -24,7 +24,7 @@ body form div.container div.col1 div, body form div.container div.col2 div {
   margin: 10px 0 10px 0;
 }
 
-body form div.container div.col1 div input[type="checkbox"], body form div.container div.col2 div input[type="checkbox"] {
+body form div.container div.col1 div input[type="radio"], body form div.container div.col2 div input[type="radio"] {
   -webkit-transform: translateY(-2px);
           transform: translateY(-2px);
   margin-right: 5px;

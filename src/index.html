@@ -9,19 +9,18 @@
 </head>
 <body>
   <h3>Create a new timer.</h3>
-  <div><strong>Warning!</strong> Only the `every` and `once` input and the `notification` input work just yet.</div>
   <form>
     <div class="container">
       <div class="col1">
         <h5>Notify me...</h5>
-        <div class="enabled"><input checked value="every" type="checkbox"><div>Every <input type="number" placeholder="e.g. 20" id="every" step="0.1"> Minutes</div></div>
-        <div class="disabled"><input value="once" type="checkbox"><div>In <input type="number" step="0.1" id="once" placeholder="e.g. 20"> Minutes</div></div>
-        <div class="disabled"><input value="daily" type="checkbox"><div>Every day at <input type="time" id="daily" placeholder="3:15 PM"></div></div>
+        <div class="enabled"><input checked value="every" type="radio" name="when"><div>Every <input type="number" placeholder="e.g. 20" id="every" step="0.1"> Minutes</div></div>
+        <div class="disabled"><input value="once" type="radio" name="when"><div>In <input type="number" step="0.1" id="once" placeholder="e.g. 20"> Minutes</div></div>
+        <div class="disabled"><input value="daily" type="radio" name="when"><div>Every day at <input type="time" id="daily" placeholder="3:15 PM"></div></div>
       </div>
       <div class="col2">
         <h5>And then...</h5>
-        <div class="enabled"><input checked value="notification" type="checkbox"><div>Create a notification <input type="text" id="notification"></div></div>
-        <div class="disabled"><input value="url" type="checkbox"><div>Browse to <input type="url" id="url" placeholder="e.g. https://jobbel.nl"></div></div>
+        <div class="enabled"><input checked value="notification" type="radio" name="action"><div>Create a notification <input type="text" id="notification"></div></div>
+        <div class="disabled"><input value="url" type="radio" name="action"><div>Browse to <input type="url" id="url" placeholder="e.g. https://jobbel.nl"></div></div>
       </div>
     </div>
     
