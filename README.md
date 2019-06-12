@@ -5,7 +5,7 @@
 * * *
 
 ## 💻 How does the app work?
-It is very simple. In your tray, on Mac at the top right and on windows at the bottom right, an icon like the electron icon shows up. If you click it, a menu appears. Hit "_Add a timer_" to create a new timer. Fill all the information required and click submit. You have successfully created a timer.
+It is very simple. In your tray, on Mac at the top right and on windows at the bottom right, an icon like the icon at the top of this file shows up. If you click it, a menu appears. Hit "_Add a timer_" to create a new timer. Fill in all the information required and click submit. You have successfully created a timer.
 
 If you want to delete a timer. Click the icon again and hit the name of the timer that you want to delete. Hit "Quit notifier" to stop all timers and the application itself.
 
