@@ -1,6 +1,6 @@
  <p align="left"><img src="assets/icons/horizontal.png" alt="notifier" height="90px"></p>
  
- ![build](https://img.shields.io/azure-devops/build/stickyPiston/27fa1423-88db-4996-afc5-05bf0041062b/1.svg)
+ ![build](https://img.shields.io/azure-devops/build/stickyPiston/27fa1423-88db-4996-afc5-05bf0041062b/1.svg?logo=azuredevops)
  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b4e0f7b577f04f25a3bcce4dbfc7b176)](https://app.codacy.com/app/stickyPiston/notifier?utm_source=github.com&utm_medium=referral&utm_content=stickyPiston/notifier&utm_campaign=Badge_Grade_Dashboard)
 
 🔔 An application that reminds you of things.
