@@ -1,4 +1,6 @@
  <p align="left"><img src="assets/icons/horizontal.png" alt="notifier" height="90px"></p>
+ 
+ ![build](https://img.shields.io/azure-devops/build/stickyPiston/27fa1423-88db-4996-afc5-05bf0041062b/1.svg)
 
 🔔 An application that reminds you of things.
 
