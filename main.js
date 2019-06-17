@@ -33,6 +33,11 @@ function createWindow() {
   })
 }
 
+const updateTray = () => {
+  const contextMenu = Menu.buildFromTemplate(template)
+  appIcon.setContextMenu(contextMenu)
+}
+
 const execAction = (arg, index) => {
   // Create notification
   if (arg.action === 'notification') {
@@ -53,17 +58,7 @@ const execAction = (arg, index) => {
         template.splice(index, 1)
         updateTray()
       }
-
-  } else if (arg.action === 'program') {
-    var cp = require("child_process")
-    cp.exec("document.docx")
-    console.log('program executed!')
   }
-}
-
-const updateTray = () => {
-  const contextMenu = Menu.buildFromTemplate(template)
-  appIcon.setContextMenu(contextMenu)
 }
 
 // This method will be called when Electron has finished
@@ -109,14 +104,13 @@ app.on('ready', () => {
 
   // When the addTimer form is completed
   ipcMain.on('formSubmitted', (_e, arg) => {
-    console.log('form submitted!');
     
     // Add timer to template array for tray
     var index = template.push({
-      label: arg.actionValue.replace('https://', '') + ' (' + arg.time + ' min)'
+      label: arg.actionValue.replace('https://', '') + ' (' + arg.time + (arg.when !== 'time' ? 'min' : '') + ')'
     })-1
 
-    if (arg.when === 'daily' ) {
+    if (arg.when === 'time' ) {
 
       var varName = arg.actionValue + Math.round(Math.random() * 10)
       dailyIntervals[varName] = 0
@@ -132,13 +126,16 @@ app.on('ready', () => {
 
           dailyIntervals[varName] = 1
 
+          template.splice(index, 1)
+          updateTray()
+
         }
 
       }, 1000);
 
     } else {
-      if (arg.when === 'every') var intervalID = setInterval(() => { execAction(arg) }, arg.time * 60 * 1000)
-      else if (arg.when === 'once') var intervalID = setTimeout(() => { execAction(arg, index) }, arg.time * 60 * 1000)
+      if (arg.when === 'interval') var intervalID = setInterval(() => { execAction(arg) }, arg.time * 60 * 1000)
+      else if (arg.when === 'timeout') var intervalID = setTimeout(() => { execAction(arg, index) }, arg.time * 60 * 1000)
     }
 
     // Set click event on the tray element
