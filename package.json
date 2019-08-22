@@ -1,7 +1,7 @@
 {
   "name": "notifier",
   "version": "1.0.0",
-  "description": "",
+  "description": "🔔 An application that reminds you of things.",
   "repository": {
     "type": "git",
     "url": "git://github.com/stickyPiston/notifier.git"
@@ -9,15 +9,23 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build" : "electron-packager ./ --all"
+    "build:windows": "find ./dist/apps -name 'notifier-win32-*' -exec rm -rf {} +; find ./dist/installers -name '*.exe' -exec rm -rf {} +; node build.js --windows",
+    "build:macos": "find ./dist/apps -name 'notifier-darwin-*' -exec rm -rf {} +; find ./dist/installers -name '*.dmg' -exec rm -rf {} +; node build.js --macos",
+    "build:linux": "find ./dist/apps -name 'notifier-linux-*' -exec rm -rf {} +; find ./dist/installers -name '*.deb' -exec rm -rf {} +; node build.js --linux"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "notifier"
+  ],
+  "author": "stickyPiston",
+  "license": "Unlicense",
   "devDependencies": {
     "coffeescript": "^2.4.1",
     "electron": "^5.0.1",
-    "electron-packager": "^13.1.1"
+    "electron-installer-debian": "^2.0.0",
+    "electron-installer-dmg": "^3.0.0",
+    "electron-installer-windows": "^2.0.0",
+    "electron-packager": "^13.1.1",
+    "electron-wix-msi": "^2.1.1"
   },
   "dependencies": {
     "electron-is-dev": "^1.1.0"
