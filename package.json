@@ -20,11 +20,11 @@
   "license": "Unlicense",
   "devDependencies": {
     "coffeescript": "^2.4.1",
-    "electron": "^5.0.1",
+    "electron": "^7.1.2",
     "electron-installer-debian": "^2.0.0",
     "electron-installer-dmg": "^3.0.0",
     "electron-installer-windows": "^2.0.0",
-    "electron-packager": "^13.1.1",
+    "electron-packager": "^14.1.1",
     "electron-wix-msi": "^2.1.1"
   },
   "dependencies": {
